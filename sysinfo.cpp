@@ -142,6 +142,37 @@ static int _GetElfBuff(uint8_t* buff, int buffSize)
     return 0;
 }
 
+static int _GetCpuInfoBuff(char* buff, int buffSize, const char* hit)
+{
+    char* p;
+    char line[1024] = {0};
+
+    FILE* fp = fopen("/proc/cpuinfo", "rb");
+    if (!fp)
+        return -1;
+
+    while (fgets(line, sizeof(line), fp))
+    {
+        p = strstr(line, hit);
+        if (p)
+        {
+            p += strlen(hit);
+            while (*p && *p++ != ':');
+            while (*p && *p <= ' ') p++;
+            if (*p)
+            {
+                while (*p >= ' ' && buffSize > 0)
+                    *buff++ = *p++;
+                break;
+            }
+        }
+        memset(line, 0, sizeof(line));
+    }
+
+    fclose(fp);
+    return 0;
+}
+
 int SysInfo_SysBits()
 {
     uint8_t elfBuff[8] = {0};
@@ -233,12 +264,12 @@ int SysInfo_CpuArch(char *buff, int buffSize)
 
 int SysInfo_CpuVendor(char *buff, int buffSize)
 {
-    return 0;
+    return _GetCpuInfoBuff(buff, buffSize, (const char*)"vendor");
 }
 
 int SysInfo_CpuFullName(char *buff, int buffSize)
 {
-    return 0;
+    return _GetCpuInfoBuff(buff, buffSize, (const char*)"model name");
 }
 
 int SysInfo_KernelName(char *buff, int buffSize)
