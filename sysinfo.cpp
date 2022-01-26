@@ -139,6 +139,13 @@ static int _GetElfBuff(uint8_t* buff, int buffSize)
         return -1;
     fread(buff, 1, buffSize, fp);
     fclose(fp);
+
+    if (buffSize > 3 &&
+        (buff[0] != 0x7F || buff[1] != 0x45 ||
+        buff[2] != 0x4C || buff[3] != 0x46))
+    {
+        return -1;
+    }
     return 0;
 }
 
@@ -264,12 +271,12 @@ int SysInfo_CpuArch(char *buff, int buffSize)
 
 int SysInfo_CpuVendor(char *buff, int buffSize)
 {
-    return _GetCpuInfoBuff(buff, buffSize, (const char*)"vendor");
+    return _GetCpuInfoBuff(buff, buffSize, (const char*)"endor");
 }
 
 int SysInfo_CpuFullName(char *buff, int buffSize)
 {
-    return _GetCpuInfoBuff(buff, buffSize, (const char*)"model name");
+    return _GetCpuInfoBuff(buff, buffSize, (const char*)"odel name");
 }
 
 int SysInfo_KernelName(char *buff, int buffSize)
