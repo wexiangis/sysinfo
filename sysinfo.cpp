@@ -125,7 +125,7 @@ int SysInfo_SysVersion(char *buff, int buffSize)
 }
 
 /* ---------- Linux ---------- */
-#else
+#else // Unix/Linux
 
 #include <stdbool.h>
 #include <unistd.h> // sysconf()
