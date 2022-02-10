@@ -134,9 +134,26 @@ int SysInfo_SysVersion(char *buff, int buffSize)
 
 static int _GetElfBuff(uint8_t* buff, int buffSize)
 {
-    FILE* fp = fopen("/bin/bash", "rb");
+    const char* list[] = {
+        "/bin/bash",
+        "/bin/ls",
+        "/bin/ps"
+    };
+    FILE* fp = NULL;
+    int i;
+    
+    for (i = 0; i < sizeof(list) / sizeof(list[0]); i++)
+    {
+        if (access(list[i], F_OK) == 0)
+        {
+            fp = fopen(list[i], "rb");
+            if (fp)
+                break;
+        }
+    }
     if (!fp)
         return -1;
+
     fread(buff, 1, buffSize, fp);
     fclose(fp);
 
@@ -214,53 +231,53 @@ int SysInfo_CpuArch(char *buff, int buffSize)
 
     switch (arch)
     {
-        case EM_386: // 3
+        case 3: // EM_386
             snprintf(buff, buffSize, "i386");
             break;
-        case EM_68K: // 4
+        case 4: // EM_68K
             snprintf(buff, buffSize, "i68k");
             break;
-        case EM_88K: // 5
+        case 5: // EM_88K
             snprintf(buff, buffSize, "i88k");
             break;
-        case EM_IAMCU: // 6
+        case 6: // EM_IAMCU
             snprintf(buff, buffSize, "ia32");
             break;
-        case EM_860: // 7
+        case 7: // EM_860
             snprintf(buff, buffSize, "i860");
             break;
-        case EM_MIPS: // 8
+        case 8: // EM_MIPS
             snprintf(buff, buffSize, "mips%s%s", bits == 64 ? "64" : "", isLittleEndian ? "el" : "");
             break;
-        case EM_960: // 19
+        case 19: // EM_960
             snprintf(buff, buffSize, "i960");
             break;
-        case EM_PPC: // 20
+        case 20: // EM_PPC
             snprintf(buff, buffSize, "ppc");
             break;
-        case EM_PPC64: // 21
+        case 21: // EM_PPC64
             snprintf(buff, buffSize, "ppc64");
             break;
-        case EM_ARM: // 40
+        case 40: // EM_ARM
             snprintf(buff, buffSize, "arm");
             break;
-        case EM_IA_64: // 50
+        case 50: // EM_IA_64
             snprintf(buff, buffSize, "ia64");
             break;
-        case EM_X86_64: // 62
+        case 62: // EM_X86_64
             snprintf(buff, buffSize, "x86_64");
             break;
-        case EM_AARCH64: // 183
+        case 183: // EM_AARCH64
             snprintf(buff, buffSize, "aarch64");
             break;
-        case EM_AMDGPU: // 224
+        case 224: // EM_AMDGPU
             snprintf(buff, buffSize, "amdgpu");
             break;
-        case EM_RISCV: // 243
+        case 243: // EM_RISCV
             snprintf(buff, buffSize, "riscv");
             break;
-        case 258:
-            snprintf(buff, buffSize, "loongson64");
+        case 258: // Loongson(3A5000)
+            snprintf(buff, buffSize, "loongarch64");
             break;
         default:
             snprintf(buff, buffSize, "unknown(%d)", arch);

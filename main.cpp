@@ -39,7 +39,11 @@ int main(void)
     SysInfo_SysVersion(buff, sizeof(buff));
     printf("SysInfo_SysVersion: %s \r\n", buff);
 
+    // Windows
+#if defined(WIN32) || defined(WINCE) || defined(_MSC_VER)
     printf("\r\n ---------- Enter to exit --------- \r\n");
     getchar();
+#endif
+
     return 0;
 }
