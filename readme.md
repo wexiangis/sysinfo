@@ -1,15 +1,31 @@
-# 信息获取方法
+# 1、编译和测试
 
-## Linux
+## 普通编译
+```
+gcc -o template main.cpp sysinfo.cpp
+./template
+```
+
+## cmake编译
+```
+cmake .
+make
+./template
+```
+
+# 2、信息获取原理
+
+## unix/linux/android(ndk)
+---
 
 * 系统位数:
 ```
-elf文件解析(/bin/bash), buff[4]等于1时为32bit, 等于2时为64bit
+elf文件解析(/bin/bash或者/proc/self/exe), buff[4]等于1时为32bit, 等于2时为64bit
 ```
 
 * 程序位数:
 ```
-查看代码指针大小, sizeof(void*) * 8, 32或者64
+查看代码指针大小, sizeof(void*) * 8, 32bit或者64bit
 ```
 
 * cpu核心数:
@@ -21,8 +37,8 @@ sysconf(_SC_NPROCESSORS_CONF);
 ```
 
 * cpu架构:
-```C
-elf文件解析(/bin/bash), 其中:
+```
+elf文件解析(/bin/bash或者/proc/self/exe), 其中:
 
 *((uint16_t*)&buff[18]);
 
@@ -33,12 +49,12 @@ elf文件解析(/bin/bash), 其中:
 
 * cpu厂商:
 ```
-解析 /proc/cpuinfo 中的关键字 "vendor" 所在行
+解析 /proc/cpuinfo 中的关键字 "vendor" 所在行 (部分系统无该词条)
 ```
 
 * cpu全称:
 ```
-解析 /proc/cpuinfo 中的关键字 "model name" 所在行
+解析 /proc/cpuinfo 中的关键字 "model name" 所在行 (部分系统无该词条)
 ```
 
 * 内核名称:
@@ -78,6 +94,7 @@ char* p = info.version;
 ```
 
 ## Windows
+---
 
 * 系统位数:
 ```
