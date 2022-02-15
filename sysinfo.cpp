@@ -232,25 +232,25 @@ int SysInfo_CpuArch(char *buff, int buffSize)
     switch (arch)
     {
         case 3: // EM_386
-            snprintf(buff, buffSize, "i386");
+            snprintf(buff, buffSize, "80386");
             break;
         case 4: // EM_68K
-            snprintf(buff, buffSize, "i68k");
+            snprintf(buff, buffSize, "8068k");
             break;
         case 5: // EM_88K
-            snprintf(buff, buffSize, "i88k");
+            snprintf(buff, buffSize, "8088k");
             break;
         case 6: // EM_IAMCU
             snprintf(buff, buffSize, "ia32");
             break;
         case 7: // EM_860
-            snprintf(buff, buffSize, "i860");
+            snprintf(buff, buffSize, "80860");
             break;
         case 8: // EM_MIPS
             snprintf(buff, buffSize, "mips%s%s", bits == 64 ? "64" : "", isLittleEndian ? "el" : "");
             break;
         case 19: // EM_960
-            snprintf(buff, buffSize, "i960");
+            snprintf(buff, buffSize, "80960");
             break;
         case 20: // EM_PPC
             snprintf(buff, buffSize, "ppc");
